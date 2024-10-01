@@ -10,6 +10,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
 // Use the email routes under the '/api' prefix
 app.use('/api', emailRoutes);
 
