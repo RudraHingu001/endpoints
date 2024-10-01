@@ -1,4 +1,3 @@
-// server/server.js
 const express = require('express');
 const cors = require('cors');
 const emailRoutes = require('./routes/emailRoutes');
@@ -7,7 +6,14 @@ const trackingRoutes = require('./routes/tracking'); // Import the tracking rout
 
 const app = express();
 
-app.use(cors());
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
+app.use(cors({
+  origin: 'http://localhost:5173/' // specify your frontend origin
+}));
 app.use(express.json());
 
 app.get('/', (req, res) => {
