@@ -200,4 +200,38 @@ router.get('/getPreviousAddress', async (req, res) => {
   }
 });
 
+router.delete('/deleteOrder/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedOrder = await Order.findByIdAndDelete(id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json({ message: 'Order deleted successfully', deletedOrder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error while deleting the order' });
+  }
+});
+
+router.delete('/deleteRequest/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedOrder = await CancelRequest.findByIdAndDelete(id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: 'Cancel Request not found' });
+    }
+
+    res.status(200).json({ message: 'Cancel Request deleted successfully', deletedOrder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error while deleting the Cancel Request' });
+  }
+});
+
 module.exports = router;
