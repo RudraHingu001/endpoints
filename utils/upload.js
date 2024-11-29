@@ -11,33 +11,22 @@ if (!fs.existsSync(uploadDir)) {
   console.log('Uploads directory created');
 }
 
-// Set up file storage configuration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Use the absolute path to the uploads directory
-    cb(null, uploadDir); 
+    cb(null, uploadDir);  // Use the upload directory
   },
   filename: (req, file, cb) => {
-    // Use timestamp for unique filenames
-    cb(null, Date.now() + path.extname(file.originalname)); 
+    // Make sure filenames are unique to avoid overwriting
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));  // Append a unique suffix
   },
 });
+
 
 // Configure multer with limits
 const upload = multer({ 
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // Limit file size to 10MB
-}).array('images', 5); // Allow up to 5 images
+}).any(); // Use .any() to accept all fields, not just a specific one like 'images'
 
-// Function to generate image URLs from uploaded files
-const uploadImages = (files) => {
-  return new Promise((resolve, reject) => {
-    if (!files || files.length === 0) {
-      reject('No files uploaded');
-    }
-    const imageUrls = files.map(file => `/uploads/${file.filename}`); // Generate URLs based on filenames
-    resolve(imageUrls);
-  });
-};
-
-module.exports = { upload, uploadImages };
+module.exports = { upload };

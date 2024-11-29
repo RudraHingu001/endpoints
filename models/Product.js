@@ -26,8 +26,19 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  colors: [String],
-  imageUrls: [String], // Array of image URLs
+  colors: [{
+    hex: { 
+      type: String,
+      required: true, 
+    },
+    name: { 
+      type: String, 
+      required: true,
+    },
+    imageUrls: [{ 
+      type: String, 
+    }],
+  }],
   sizes: [{
     type: String,
     required: true,  // Example: 'S', 'M', 'L', 'XL'
